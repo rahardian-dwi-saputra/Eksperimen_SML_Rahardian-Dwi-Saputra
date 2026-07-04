@@ -1,0 +1,49 @@
+name: Data Preprocessing Workflow
+
+on:
+  push:
+    branches:
+      - main
+  pull_request:
+    branches:
+      - main
+  workflow_dispatch:
+
+jobs:
+  preprocessing-job:
+    # Menggunakan sistem operasi Ubuntu terbaru yang disediakan oleh GitHub Actions
+    runs-on: ubuntu-latest
+
+    steps:
+    - name: Checkout Repository Code
+      uses: actions/checkout@v4
+
+    # Step 2: Siapkan lingkungan Python versi 3.12.7
+    - name: Set up Python 3.12.7
+      uses: actions/setup-python@v5
+      with:
+        python-version: '3.12.7'
+        cache: 'pip'
+
+    # Step 3: Install semua pustaka yang terdaftar di dalam root requirements.txt
+    - name: Install Dependencies from Requirements
+      run: |
+        python -m pip install --upgrade pip
+        if [ -f requirements.txt ]; then
+          pip install -r requirements.txt
+        else
+          echo "File requirements.txt tidak ditemukan di root folder!"
+          exit 1
+        fi
+
+    # Step 4: Jalankan skrip Python Preprocessing
+    - name: Run Preprocessing Script
+      run: |
+        python preprocessing/automate_Rahardian-dwi-saputra.py
+
+    # Step 5: Amankan dan unggah file hasil olahan (.csv) sebagai Artefak GitHub
+    - name: Upload Preprocessed Data Artifact
+      uses: actions/upload-artifact@v4
+      with:
+        name: heart-preprocessed-csv
+        path: preprocessing/heart_preprocessing.csv

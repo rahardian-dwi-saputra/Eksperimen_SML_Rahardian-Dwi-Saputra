@@ -127,3 +127,11 @@ def preprocess_data(filepath_or_df, target_column, save_path, file_path):
     print(f"Seluruh hasil akhir preprocessing disimpan ke: {file_path}")
 
     return X_train_res, X_test_res, y_train, y_test
+
+
+X_train, X_test, y_train, y_test = preprocess_data(
+    filepath_or_df="heart_raw/heart.csv",
+    target_column="HeartDisease",
+    save_path="preprocessing/preprocessor_pipeline.joblib",
+    file_path="preprocessing/heart_preprocessing.csv",
+)
